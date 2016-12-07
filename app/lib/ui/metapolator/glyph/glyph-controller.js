@@ -1,10 +1,11 @@
 define([], function() {
     "use strict";
-    function GlyphController($scope, glyphRendererAPI) {
+    function GlyphController($scope, glyphUIService) {
         this.$scope = $scope;
 
         // if a glyph of an instance is rendered, we need to check if the corresponding glyph
         // of iths baseMaster(s) are measured already
+        // WHY?
         $scope.checkBaseMasters = function(glyph) {
             var instance = glyph.parent;
             for (var i = instance.axes.length - 1; i >= 0; i--) {
@@ -13,21 +14,17 @@ define([], function() {
                   , masterGlyph = master.findGlyphByName(glyph.name);
                 if (!masterGlyph.measured) {
                     masterGlyph.measureGlyph();
-                } 
+                }
             }
         };
 
-        $scope.renderGlyph = function(masterName, glyphName) {
-            return glyphRendererAPI.get(masterName, glyphName);
-        };
-
-        $scope.revokeGlyph = function(masterName, glyphName) {
-            glyphRendererAPI.revoke(masterName, glyphName);
+        $scope.renderGlyph = function(momGlyph) {
+            return glyphUIService.get(momGlyph);
         };
     }
 
-    GlyphController.$inject = ['$scope', 'glyphRendererAPI'];
+    GlyphController.$inject = ['$scope', 'glyphUIService'];
     var _p = GlyphController.prototype;
 
     return GlyphController;
-}); 
+});

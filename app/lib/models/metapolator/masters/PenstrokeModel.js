@@ -6,7 +6,7 @@ define([
   , PointModel
 ){
     "use strict";
-    function PenstrokeModel(name, parent, MOMelement) {
+    function PenstrokeModel(name, parent, momElement) {
         this.level = "penstroke";
         this.name = name;
         this.edit = true;
@@ -16,22 +16,16 @@ define([
         // cps properties
         this.parameters = [];
         this.master = parent.master;
-        this.MOMelement = MOMelement;
-        this.ruleIndex = null;
+        this.momElement = momElement;
 
         this.setInitialParameters();
     }
-    
+
     var _p = PenstrokeModel.prototype = Object.create(Parent.prototype);
 
-    _p.getSelector = function() {
-        return "master#" + this.master.name + " " + "glyph#" + this.parent.name + " > " + this.name;
-
-    };
-    
-    _p.addPoint = function(name, MOMelement) {
+    _p.addPoint = function(name, momElement) {
         this.children.push(
-            new PointModel(name, this, MOMelement)
+            new PointModel(name, this, momElement)
         );
     };
 

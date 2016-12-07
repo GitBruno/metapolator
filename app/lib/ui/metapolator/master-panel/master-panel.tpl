@@ -25,6 +25,13 @@
                 </li>
             </ul>
         </li>
+        <li class="masters-import"
+            ng-repeat="process in importProcesses">
+            <mtk-masters-import
+                mtk-import-process="process"
+                ></mtk-masters-import>
+        </li>
+
     </ul>
     <div class="list-buttons">
         <div title="Import UFO" ng-click="importUfo();" class="list-button">

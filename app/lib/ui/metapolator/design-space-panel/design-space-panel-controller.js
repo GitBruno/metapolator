@@ -27,26 +27,15 @@ define([
         };
         
         $scope.cloneDesignSpace = function () {
-            var oldDesignSpace = $scope.model.currentDesignSpace;
+            var oldDesignSpace = $scope.model.currentDesignSpace
+              , sequence0 = $scope.model.instanceSequences[0];
             oldDesignSpace.clone();
-            var sequence0 = $scope.model.instanceSequences[0];
             for (var i = $scope.model.instanceSequences.length - 1; i >= 0; i--) {
                 var sequence = $scope.model.instanceSequences[i];
                 for (var j = sequence.children.length - 1; j >= 0; j--) {
                     var instance = sequence.children[j];
                     if (instance.designSpace === oldDesignSpace) {
-                        // clone the instance as well
-                        var axes = []
-                          , clone;
-                        for (var k = 0, l = instance.axes.length; k < l; k++) {
-                            var axis = instance.axes[k];
-                            axes.push({
-                                axisValue: axis.axisValue,
-                                metapolationValue : axis.metapolationValue,
-                                master: axis.master
-                            });
-                        }
-                        clone = sequence0.createNewInstance(axes, $scope.model.currentDesignSpace);
+                        var clone = instance.clone($scope.model.currentDesignSpace, project);
                         instanceTools.registerInstance(project, clone);
                         sequence0.addInstance(clone);
                     }

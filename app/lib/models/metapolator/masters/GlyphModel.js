@@ -8,7 +8,7 @@ define([
   , selection
 ){
     'use strict';
-    function GlyphModel(name, parent, MOMelement) {
+    function GlyphModel(name, parent, momElement) {
         this.level = 'glyph';
         this.type = 'master';
         this.name = name;
@@ -21,24 +21,19 @@ define([
         // cps properties
         this.parameters = [];
         this.measured = false; // only the initial parameter values are measured for glyphs when they appear in the view
-        this.MOMelement = MOMelement;
-        this.ruleIndex = null;
+        this.momElement = momElement;
 
         this.setInitialParameters();
     }
-    
-    var _p = GlyphModel.prototype = Object.create(Parent.prototype);
 
-    _p.getSelector = function() {
-        return 'master glyph#' + this.name;
-    };
+    var _p = GlyphModel.prototype = Object.create(Parent.prototype);
 
     _p.getMasterName = function() {
         return this.parent.name;
     };
-    
-    _p.addPenstroke = function(name, MOMelement) {
-        var penstroke = new PenstrokeModel(name, this, MOMelement);
+
+    _p.addPenstroke = function(name, momElement) {
+        var penstroke = new PenstrokeModel(name, this, momElement);
         this.children.push(penstroke);
         return penstroke;
     };
@@ -46,6 +41,7 @@ define([
     // handling measuring and cps writing only for displayed glyphs
 
     _p.checkIfIsDisplayed = function() {
+        // FIXME: understand these measurement things
         if (!this.displayed) {
             // if a glyph is never displayed before it can have been measured
             // (because measure info is shared among cloned masters)
@@ -87,8 +83,8 @@ define([
                 for (var j = 0, jl = effectedElements.length; j < jl; j++) {
                     var effectedElement = effectedElements[j]
                       , elementParameter = effectedElement.getParameterByName(baseParameter.name)
-                      , MOMelement = effectedElement.MOMelement;
-                    elementParameter.setInitial(MOMelement);
+                      , momElement = effectedElement.momElement;
+                    elementParameter.setInitial(momElement);
                 }
             }
 
@@ -114,6 +110,6 @@ define([
         }
         this.displayed = true;
     };
-    
+
     return GlyphModel;
 });
